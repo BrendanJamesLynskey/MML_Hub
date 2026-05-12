@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematics for Machine Learning &mdash; Companion Series</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0a; --bg-card: #0d1117; --bg-code: #161b22;
+            --text-primary: #e6edf3; --text-secondary: #8b949e;
+            --accent: #a78bfa; --accent-dim: #a78bfa44; --accent-glow: #a78bfa33;
+            --accent-2: #f472b6; --accent-3: #fbbf24; --accent-4: #34d399;
+            --border: #21262d;
+            --font-display: 'Space Grotesk', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+            --font-body: 'Inter', sans-serif;
+            --max-width: 960px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body { background: var(--bg-primary); color: var(--text-primary);
+               font-family: var(--font-body); font-size: 17px; line-height: 1.7;
+               overflow-x: hidden; }
+        .hero { min-height: 60vh; display: flex; flex-direction: column;
+                justify-content: center; align-items: center;
+                padding: 4rem 1.5rem 3rem; text-align: center; position: relative; }
+        .hero::before { content: ''; position: absolute; top: 0; left: 50%;
+                        transform: translateX(-50%); width: 700px; height: 600px;
+                        background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+                        pointer-events: none; z-index: 0; }
+        .hero > * { position: relative; z-index: 1; }
+        .series-label { font-family: var(--font-mono); font-size: 0.85rem;
+                        color: var(--accent); letter-spacing: 0.15em;
+                        text-transform: uppercase; margin-bottom: 1rem; }
+        .hero h1 { font-family: var(--font-display);
+                   font-size: clamp(2rem, 5vw, 3rem); font-weight: 700;
+                   color: var(--text-primary); line-height: 1.2; margin-bottom: 1rem; }
+        .hero h1 .accent { color: var(--accent); }
+        .hero .subtitle { font-size: 1.1rem; color: var(--text-secondary);
+                          max-width: 720px; margin-bottom: 1.5rem; }
+        .tags { display: flex; flex-wrap: wrap; gap: 0.5rem;
+                justify-content: center; margin-bottom: 1rem; }
+        .tag { font-family: var(--font-mono); font-size: 0.75rem;
+               padding: 0.25rem 0.75rem; border-radius: 999px;
+               border: 1px solid var(--accent); color: var(--accent);
+               background: var(--accent-dim); white-space: nowrap; }
+        .tag.r { border-color: var(--accent-2); color: var(--accent-2); background: rgba(244,114,182,0.10); }
+        .tag.y { border-color: var(--accent-3); color: var(--accent-3); background: rgba(251,191,36,0.10); }
+        .tag.g { border-color: var(--accent-4); color: var(--accent-4); background: rgba(52,211,153,0.10); }
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem; }
+        h2 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 700;
+             color: var(--accent); margin: 1rem 0 1.25rem; }
+        h3 { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600;
+             color: var(--text-primary); margin: 1.5rem 0 0.6rem;
+             padding-bottom: 0.3rem; border-bottom: 1px solid var(--border); }
+        .deck-list { display: flex; flex-direction: column; gap: 0.6rem;
+                     list-style: none; padding: 0; }
+        .deck-card { display: flex; gap: 1rem; padding: 1rem 1.25rem;
+                     background: var(--bg-card); border: 1px solid var(--border);
+                     border-left: 3px solid var(--accent); border-radius: 6px;
+                     transition: border-color 0.15s; }
+        .deck-card:hover { border-color: var(--accent); }
+        .deck-card.r { border-left-color: var(--accent-2); }
+        .deck-card.r:hover { border-color: var(--accent-2); }
+        .deck-card .num { font-family: var(--font-mono); font-size: 0.85rem;
+                          color: var(--accent); min-width: 2.2rem;
+                          padding-top: 0.15rem; font-weight: 500; }
+        .deck-card.r .num { color: var(--accent-2); }
+        .deck-card .body { flex: 1; min-width: 0; }
+        .deck-card .deck-title { font-family: var(--font-display); font-size: 1.05rem;
+                                 font-weight: 600; color: var(--text-primary);
+                                 margin-bottom: 0.2rem; }
+        .deck-card a.deck-title { text-decoration: none; }
+        .deck-card a.deck-title:hover { color: var(--accent); }
+        .deck-card.r a.deck-title:hover { color: var(--accent-2); }
+        .deck-card .desc { font-size: 0.92rem; color: var(--text-secondary); }
+        .deck-card .meta { font-family: var(--font-mono); font-size: 0.7rem;
+                           color: var(--text-secondary); margin-top: 0.4rem;
+                           display: flex; gap: 0.6rem; flex-wrap: wrap; }
+        .badge { display: inline-block; font-family: var(--font-mono);
+                 font-size: 0.65rem; padding: 0.1rem 0.5rem; border-radius: 999px;
+                 border: 1px solid var(--border); color: var(--text-secondary); }
+        .badge.live { border-color: var(--accent); color: var(--accent);
+                      background: var(--accent-dim); }
+        .callout { background: var(--bg-card); border-left: 3px solid var(--accent);
+                   border-radius: 0 8px 8px 0; padding: 1rem 1.25rem; margin: 1.5rem 0; }
+        .callout p { margin-bottom: 0; color: var(--text-secondary); }
+        .callout p strong { color: var(--text-primary); }
+        .callout p + p { margin-top: 0.6rem; }
+        .arc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                    gap: 0.75rem; margin: 1rem 0 1.5rem; }
+        .arc-cell { background: var(--bg-card); border: 1px solid var(--border);
+                    border-left: 3px solid var(--accent); border-radius: 6px;
+                    padding: 0.85rem 1rem; }
+        .arc-cell.r { border-left-color: var(--accent-2); }
+        .arc-cell.g { border-left-color: var(--accent-4); }
+        .arc-cell h4 { font-family: var(--font-display); font-size: 0.95rem;
+                       color: var(--accent); margin-bottom: 0.3rem; }
+        .arc-cell.r h4 { color: var(--accent-2); }
+        .arc-cell.g h4 { color: var(--accent-4); }
+        .arc-cell p { font-size: 0.85rem; color: var(--text-secondary); margin: 0; }
+        .book-card { background: var(--bg-card); border: 1px solid var(--border);
+                     border-radius: 8px; padding: 1.25rem 1.5rem; margin: 1rem 0 1.5rem;
+                     display: grid; grid-template-columns: 1fr; gap: 0.4rem; }
+        .book-card .label { font-family: var(--font-mono); font-size: 0.7rem;
+                            color: var(--accent-3); letter-spacing: 0.12em;
+                            text-transform: uppercase; }
+        .book-card .title { font-family: var(--font-display); font-size: 1.15rem;
+                            font-weight: 700; color: var(--text-primary); }
+        .book-card .authors { font-size: 0.95rem; color: var(--text-secondary);
+                              font-style: italic; }
+        .book-card .publisher { font-size: 0.85rem; color: var(--text-secondary); }
+        .book-card a { color: var(--accent); text-decoration: none;
+                       font-family: var(--font-mono); font-size: 0.85rem; }
+        .book-card a:hover { text-decoration: underline; }
+        .footer { text-align: center; padding: 3rem 1.5rem;
+                  color: var(--text-secondary); font-size: 0.85rem;
+                  border-top: 1px solid var(--border); max-width: var(--max-width);
+                  margin: 3rem auto 0; }
+        .footer a { color: var(--accent); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 1.8rem; }
+            .deck-card { flex-direction: column; gap: 0.3rem; }
+        }
+    </style>
+</head>
+<body>
+<header class="hero">
+    <div class="series-label">Companion Series &middot; Deisenroth &middot; Faisal &middot; Ong</div>
+    <h1>Mathematics for <span class="accent">Machine Learning</span></h1>
+    <p class="subtitle">A twelve-deck interactive companion to the Cambridge University Press textbook &mdash; from linear algebra and probability through PCA, GMMs and the SVM, every result of the book turned into a draggable, scrubbable, animated diagram in the browser.</p>
+    <div class="tags">
+        <span class="tag">Linear Algebra</span>
+        <span class="tag">Analytic Geometry</span>
+        <span class="tag">Matrix Decompositions</span>
+        <span class="tag g">Vector Calculus</span>
+        <span class="tag g">Probability</span>
+        <span class="tag y">Optimisation</span>
+        <span class="tag r">Linear Regression</span>
+        <span class="tag r">PCA</span>
+        <span class="tag r">GMM &amp; EM</span>
+        <span class="tag r">SVM</span>
+    </div>
+</header>
+<main class="container">
+
+    <div class="book-card">
+        <span class="label">Book this companion follows</span>
+        <span class="title">Mathematics for Machine Learning</span>
+        <span class="authors">Marc Peter Deisenroth, A. Aldo Faisal &amp; Cheng Soon Ong</span>
+        <span class="publisher">Cambridge University Press &middot; 2020 &middot; ISBN 978-1-108-47004-9</span>
+        <span>Free PDF: <a href="https://mml-book.github.io/">mml-book.github.io</a></span>
+    </div>
+
+    <h2>Pedagogical arc</h2>
+    <div class="arc-grid">
+        <div class="arc-cell">
+            <h4>01 &mdash; The book's map</h4>
+            <p>The four pillars (regression, dim-reduction, density estimation, classification) and what each chapter contributes to them.</p>
+        </div>
+        <div class="arc-cell g">
+            <h4>02 &ndash; 07 &nbsp;Part I &mdash; Foundations</h4>
+            <p>Linear algebra, analytic geometry, matrix decompositions, vector calculus, probability and continuous optimisation &mdash; the toolkit Part II will use.</p>
+        </div>
+        <div class="arc-cell r">
+            <h4>08 &ndash; 12 &nbsp;Part II &mdash; Four canonical problems</h4>
+            <p>Linear regression as projection, PCA as eigenvectors of the covariance, GMMs trained with EM, and the kernel SVM &mdash; built directly from the Part I tools.</p>
+        </div>
+    </div>
+
+    <h2>Presentations in this series</h2>
+
+    <h3>Part I &mdash; Mathematical Foundations</h3>
+    <ol class="deck-list">
+        <li class="deck-card"><div class="num">01</div><div class="body"><a class="deck-title" href="https://brendanjameslynskey.github.io/MML_01_Introduction/">Introduction and Motivation &rarr;</a><div class="desc">The four pillars of ML (regression, dim. reduction, density estimation, classification) and the four mathematical foundations (linear algebra, analytic geometry, vector calculus, probability). Interactive map of the book and the dependency graph between chapters.</div><div class="meta"><span class="badge live">live</span><span>ch. 1</span></div></div></li>
+        <li class="deck-card"><div class="num">02</div><div class="body"><a class="deck-title" href="https://brendanjameslynskey.github.io/MML_02_Linear_Algebra/">Linear Algebra &rarr;</a><div class="desc">Systems of linear equations, matrices, Gaussian elimination, vector spaces, basis &amp; rank, linear &amp; affine maps. Interactive Gaussian-elimination row stepper that solves $A\mathbf{x}=\mathbf{b}$ live.</div><div class="meta"><span class="badge live">live</span><span>ch. 2</span></div></div></li>
+        <li class="deck-card"><div class="num">03</div><div class="body"><a class="deck-title" href="https://brendanjameslynskey.github.io/MML_03_Analytic_Geometry/">Analytic Geometry &rarr;</a><div class="desc">Norms, inner products, lengths &amp; distances, angles, orthonormal bases, orthogonal complements, orthogonal projections, rotations. Interactive projection demo with the &perp; residual drawn live.</div><div class="meta"><span class="badge live">live</span><span>ch. 3</span></div></div></li>
+        <li class="deck-card"><div class="num">04</div><div class="body"><a class="deck-title" href="https://brendanjameslynskey.github.io/MML_04_Matrix_Decompositions/">Matrix Decompositions &rarr;</a><div class="desc">Determinant &amp; trace, eigendecomposition, Cholesky, the singular value decomposition, Eckart&ndash;Young low-rank approximation, the matrix-decomposition taxonomy. Interactive SVD image compressor.</div><div class="meta"><span class="badge live">live</span><span>ch. 4</span></div></div></li>
+        <li class="deck-card"><div class="num">05</div><div class="body"><a class="deck-title" href="https://brendanjameslynskey.github.io/MML_05_Vector_Calculus/">Vector Calculus &rarr;</a><div class="desc">Partial derivatives, the gradient, the Jacobian, gradients of matrix expressions, the chain rule, backpropagation as the chain rule on a DAG, automatic differentiation, multivariate Taylor series. Interactive gradient-descent visualiser on a 2D loss surface.</div><div class="meta"><span class="badge live">live</span><span>ch. 5</span></div></div></li>
+        <li class="deck-card"><div class="num">06</div><div class="body"><a class="deck-title" href="https://brendanjameslynskey.github.io/MML_06_Probability_and_Distributions/">Probability and Distributions &rarr;</a><div class="desc">Sample spaces, sum &amp; product rules, Bayes' theorem, summary statistics, the Gaussian (with marginalisation and conditioning), conjugacy, the exponential family, change of variables. Interactive Bayes' theorem demo and bivariate Gaussian explorer.</div><div class="meta"><span class="badge live">live</span><span>ch. 6</span></div></div></li>
+        <li class="deck-card"><div class="num">07</div><div class="body"><a class="deck-title" href="https://brendanjameslynskey.github.io/MML_07_Continuous_Optimisation/">Continuous Optimisation &rarr;</a><div class="desc">Gradient descent (with and without momentum), constrained optimisation &amp; Lagrange multipliers, convex sets &amp; functions, linear &amp; quadratic programming, the Lagrange dual. Interactive descent paths on a 2D loss surface with adjustable learning rate and momentum.</div><div class="meta"><span class="badge live">live</span><span>ch. 7</span></div></div></li>
+    </ol>
+
+    <h3>Part II &mdash; Central Machine Learning Problems</h3>
+    <ol class="deck-list" start="8">
+        <li class="deck-card r"><div class="num">08</div><div class="body"><a class="deck-title" href="https://brendanjameslynskey.github.io/MML_08_When_Models_Meet_Data/">When Models Meet Data &rarr;</a><div class="desc">Data &amp; features, empirical risk minimisation, the bias-variance trade-off, regularisation, cross-validation, MLE vs MAP, directed graphical models. Interactive polynomial-fitting demo with live bias/variance and learning-curve readouts.</div><div class="meta"><span class="badge live">live</span><span>ch. 8</span></div></div></li>
+        <li class="deck-card r"><div class="num">09</div><div class="body"><a class="deck-title" href="https://brendanjameslynskey.github.io/MML_09_Linear_Regression/">Linear Regression &rarr;</a><div class="desc">Least squares as orthogonal projection onto the column space, ridge / MAP regularisation, Bayesian linear regression with posterior predictive distribution, feature maps. Interactive regression playground that updates the conjugate Gaussian posterior point-by-point.</div><div class="meta"><span class="badge live">live</span><span>ch. 9</span></div></div></li>
+        <li class="deck-card r"><div class="num">10</div><div class="body"><a class="deck-title" href="https://brendanjameslynskey.github.io/MML_10_PCA/">Dimensionality Reduction with PCA &rarr;</a><div class="desc">Variance-maximisation view, reconstruction-error view, eigenvectors of the covariance, low-rank approximation, PCA in high dimensions, probabilistic PCA, the latent-variable perspective. Interactive 2D &rarr; 1D PCA visualiser with live principal-axis fitting.</div><div class="meta"><span class="badge live">live</span><span>ch. 10</span></div></div></li>
+        <li class="deck-card r"><div class="num">11</div><div class="body"><a class="deck-title" href="https://brendanjameslynskey.github.io/MML_11_Gaussian_Mixture_Models/">Density Estimation with GMMs &rarr;</a><div class="desc">Mixture model likelihood, the EM algorithm derived from the latent-variable view, responsibilities, the lower bound, soft vs hard clustering, model-order selection. Interactive 2D EM animator with step-by-step E and M passes.</div><div class="meta"><span class="badge live">live</span><span>ch. 11</span></div></div></li>
+        <li class="deck-card r"><div class="num">12</div><div class="body"><a class="deck-title" href="https://brendanjameslynskey.github.io/MML_12_Support_Vector_Machines/">Classification with SVMs &rarr;</a><div class="desc">Separating hyperplanes &amp; the maximum-margin idea, primal hard-margin SVM, soft-margin slack, the Lagrange dual, support vectors, the kernel trick (linear, polynomial, RBF). Interactive 2D kernel SVM demo where you place points and watch the decision boundary change kernel.</div><div class="meta"><span class="badge live">live</span><span>ch. 12</span></div></div></li>
+    </ol>
+
+    <div class="callout">
+        <p><strong>Why this companion?</strong> Deisenroth, Faisal &amp; Ong's book sits at a rare intersection: it is honest mathematics &mdash; with axioms, theorems and proofs &mdash; written explicitly for ML readers. Most companions either re-derive the maths (and add nothing) or paraphrase the ML parts (and lose the rigour). This series instead <em>visualises</em> what the book proves: every abstract definition gets a draggable picture, every theorem gets a live numerical check, and every algorithm of Part II is traced back, slide-by-slide, to a theorem in Part I.</p>
+        <p>Read the book and the deck side by side &mdash; chapter and section numbers in the slides correspond directly to the book, so you can dive deeper into any proof at any time.</p>
+    </div>
+</main>
+
+<footer class="footer">
+    <p>Part of the <a href="https://github.com/BrendanJamesLynskey/Mathematics">Mathematics</a> hub &mdash; interactive presentation series in pure and applied mathematics.</p>
+    <p style="margin-top: 0.5rem;">Mathematically adjacent series: <a href="https://github.com/BrendanJamesLynskey/LLM_Hub_Linear_Algebra">Linear Algebra for AI / ML</a> &middot; <a href="https://github.com/BrendanJamesLynskey/Vector_Spaces_Basics">Vector Spaces &mdash; The Basics</a> &middot; <a href="https://github.com/BrendanJamesLynskey/Information_Theory">Information Theory</a></p>
+    <p style="margin-top: 0.8rem; font-size: 0.78rem;">Book by Marc Peter Deisenroth, A. Aldo Faisal &amp; Cheng Soon Ong &mdash; Cambridge University Press, 2020. Free PDF at <a href="https://mml-book.github.io/">mml-book.github.io</a>.</p>
+</footer>
+</body>
+</html>
